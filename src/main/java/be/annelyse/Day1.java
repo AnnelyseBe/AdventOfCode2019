@@ -9,7 +9,7 @@ public class Day1 {
 
 
     public static void main(String[] args) throws IOException {
-        List<String> input = Files.readAllLines(Paths.get("src/main/resources/input","day1"));
+        List<String> input = Files.readAllLines(Paths.get("src/main/resources/input","Day1"));
 
         solvePart1(input);
         solvePart2(input);
@@ -19,7 +19,7 @@ public class Day1 {
 
         Long result = input.stream()
                 .map((Long::parseLong))
-                .map(mass -> calculateFuel(mass))
+                .map(Day1::calculateFuel)
                 .reduce(0L, Long::sum);
 
         System.out.println("**********************Part1**********************");
@@ -29,7 +29,7 @@ public class Day1 {
     private static void solvePart2(List<String> input) {
         Long result = input.stream()
                 .map((Long::parseLong))
-                .map(mass -> calculateFuelExtended(mass))
+                .map(Day1::calculateFuelExtended)
                 .reduce(0L, Long::sum);
 
         System.out.println("**********************Part2**********************");
