@@ -1,5 +1,6 @@
-package be.annelyse;
+package be.annelyse.year2019;
 
+import be.annelyse.year2019.Day2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

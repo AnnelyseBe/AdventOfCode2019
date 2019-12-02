@@ -1,4 +1,4 @@
-package be.annelyse;
+package be.annelyse.year2019;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,7 +18,7 @@ public class Day2 {
     }
 
     static List<Integer> getIntCodeInput() throws IOException {
-        String input = Files.readString(Paths.get("src/main/resources/input", "Day2"));
+        String input = Files.readString(Paths.get("src/main/resources/input/year2019", "Day2"));
         return Arrays.stream(input.split(","))
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());

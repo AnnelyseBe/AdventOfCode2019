@@ -1,4 +1,4 @@
-package be.annelyse;
+package be.annelyse.year2019;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,7 +9,7 @@ public class Day1 {
 
 
     public static void main(String[] args) throws IOException {
-        List<String> input = Files.readAllLines(Paths.get("src/main/resources/input","Day1"));
+        List<String> input = Files.readAllLines(Paths.get("src/main/resources/input/year2019","Day1"));
 
         solvePart1(input);
         solvePart2(input);
