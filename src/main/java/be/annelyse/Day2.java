@@ -26,41 +26,44 @@ public class Day2 {
 
     static int solvePart1(List<Integer> intCodeinput, int computerCode) {
         List<Integer> initializedInputCode = initializeWithComputerCode(intCodeinput, computerCode);
-        List<Integer> transformedIntCode = solvingAlgoritm(initializedInputCode);
+        List<Integer> transformedIntCode = solvingAlgorithm(initializedInputCode);
         return transformedIntCode.get(0);
     }
 
-    static List<Integer> solvingAlgoritm(List<Integer> input) throws IndexOutOfBoundsException {
+    static List<Integer> solvingAlgorithm(List<Integer> input) throws IndexOutOfBoundsException {
 
+        int instructionPointer = 0;
         List<Integer> intCode = input;
-        int opCode = intCode.get(0);
-        for (int instructionPointer = 0; opCode != 99; ) {
-            if (opCode == 1) {
-                intCode = optcode1(intCode, instructionPointer);
-            } else if (opCode == 2) {
-                intCode = optcode2(intCode, instructionPointer);
+
+        while (intCode.get(instructionPointer) != 99){
+            switch(intCode.get(instructionPointer)){
+                case 1:
+                    intCode = optcode1(intCode, instructionPointer);
+                    break;
+                case 2:
+                    intCode = optcode2(intCode, instructionPointer);
+                    break;
             }
-            opCode = intCode.get(instructionPointer += 4);
+            instructionPointer += 4;
         }
         return intCode;
     }
 
-    static int solvePart2(Integer output) throws IOException {
+    static Integer solvePart2(Integer output) throws IOException {
         for (int i = 0; i < 10000; i++) {
-            int result;
+            int result = 0;
             List<Integer> input = getIntCodeInput();
             try {
                 result = solvePart1(input, i);
                 System.out.println("iteratie "+i +": " + result);
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("iteratie "+i +": " + e.getMessage());
-                result = 88888888;
             }
             if (result == output) {
                 return i;
             }
         }
-        return 666666;
+        throw new RuntimeException("No valid noun and verb found");
     }
 
 
@@ -91,7 +94,4 @@ public class Day2 {
 
         return intCode;
     }
-
-
-
 }

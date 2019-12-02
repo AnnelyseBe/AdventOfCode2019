@@ -58,5 +58,4 @@ public class Day1 {
         //todo implement solution with streams
         return null;
     }
-
 }
