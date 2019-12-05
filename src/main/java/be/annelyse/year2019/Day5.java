@@ -17,9 +17,6 @@ public class Day5 {
         System.out.println("\n********************************************Part1********************************************");
         System.out.println("\nSolution part 1: ");
         solvePart1(getIntCodeInput(), 1);
-
-/*        System.out.println("\n********************************************Part2********************************************");
-        System.out.println("\nSolution part 2: " + solvePart2(19690720));*/
     }
 
     static List<Integer> getIntCodeInput() throws IOException {
@@ -39,11 +36,9 @@ public class Day5 {
         int instructionPointer = 0;
         intCode = input;
         intCodeMode = input.stream().map(value -> 9).collect(Collectors.toList());
-        int opCode;
-        int postionMode;
 
-        while (intCode.get(instructionPointer) != 99){
-
+        while (getOpCode(instructionPointer) != 99){
+            System.out.println("optCode: " + getOpCode(instructionPointer));
 
             switch(getOpCode(instructionPointer)){
                 case 1:
@@ -63,7 +58,6 @@ public class Day5 {
                     instructionPointer += 2;
                     break;
             }
-            instructionPointer += 4;
         }
         return intCode;
     }
@@ -73,31 +67,17 @@ public class Day5 {
         int instructionCode = intCode.get(instructionPointer);
         List<Integer> digits = transformNumberTo5DigitList(instructionCode);
 
-        int opCode = Integer.parseInt(String.valueOf(digits.get(1))+ digits.get(0));
+        int opCode = Integer.parseInt(String.valueOf(digits.get(3))+ digits.get(4));
         return opCode;
     }
 
-    private static List<Integer> getReversedPositionMode(int instructionPointer){
-        int instructionCode = intCode.get(instructionPointer);
-
-        List<Integer> digits = transformNumberTo5DigitList(instructionCode);
-        List<Integer> positionModes = new ArrayList<>();
-
-        for (int i = 0; i < 3; i++){
-            positionModes.set(i, digits.get(2-i));
-        }
-        return positionModes;
-    }
-
-
     static void optcode1(int instructionPointer) {
-
         int parameter1 = getValueOfParameter(instructionPointer, 1);
         int parameter2 = getValueOfParameter(instructionPointer, 2);
 
         int result = parameter1 + parameter2;
 
-        setValueOfParameter(instructionPointer, 3, result);
+        writeResult(instructionPointer, 3, result);
     }
 
     static void optcode2(int instructionPointer) {
@@ -107,20 +87,19 @@ public class Day5 {
 
         int result = parameter1 * parameter2;
 
-        setValueOfParameter(instructionPointer, 3, result);
+        writeResult(instructionPointer, 3, result);
     }
 
     static void optcode3(int instructionPointer) {
         int result = computerCodeInput;
-        setValueOfParameter(instructionPointer, 1, result);
+        writeResult(instructionPointer, 1, result);
     }
 
     static void optcode4(int instructionPointer) {
 
         int result = getValueOfParameter(instructionPointer, 1);
-        System.out.println("output: ");
+        System.out.println("----------------------------------output: " + result);
     }
-
 
     static int getValueOfParameter(int instructionPointer, int parameterNr){
         if (getPositionModeOfParameter(instructionPointer, parameterNr) == 0)
@@ -132,89 +111,40 @@ public class Day5 {
         }
     }
 
-    static void setValueOfParameter(int instructionPointer, int parameterNr, int result){
+    static void writeResult(int instructionPointer, int parameterNr, int result){
         if (getPositionModeOfParameter(instructionPointer, parameterNr) == 0)
         {
-            intCode.set(intCode.get(instructionPointer+parameterNr), result);
+            int writePosition = intCode.get(instructionPointer+parameterNr);
+            intCode.set(writePosition, result);
+            intCodeMode.set((writePosition),0); //todo was dit 1 of was dit 0
         }
         else {
             intCode.set(instructionPointer+parameterNr, result);
+            intCodeMode.set((instructionPointer+parameterNr),0); //todo was dit 1 of was dit 0
         }
     }
 
     private static int getPositionModeOfParameter(int instructionPointer, int parameterNr){
-        List<Integer> positionModes = getReversedPositionMode(instructionPointer);
+        int instructionCode = intCode.get(instructionPointer);
+        List<Integer> digits = transformNumberTo5DigitList(instructionCode);
+
         if(intCodeMode.get(instructionPointer + parameterNr) == 0){
             return 0;
         } else {
-            return positionModes.get(parameterNr);
+            return digits.get(3-parameterNr);
         }
     }
 
+    /**
+    3 becomes 00003 -> digits.get(4);
+    */
     private static List<Integer> transformNumberTo5DigitList(int code){
         List<Integer> digits = new ArrayList<>();
 
         for (int k = 0; k < 5; k++){
-            digits.add(k, code % 10 );
+            digits.add(0,code % 10 );
             code = code / 10;
         }
-
-
-
-//        System.out.println("digits ");
-//        digits.forEach(digit -> System.out.print(digit + " "));
-//
-//        Collections.sort(digits, Collections.reverseOrder());
-//        System.out.println(" digits reversed order");
-//        digits.forEach(digit -> System.out.print(digit + " "));
-
         return digits;
     }
-
-    private static int transformDigitListToCode (LinkedList<Integer> digitList){
-        int result = 0;
-        int multiplier = 1;
-
-        while (!digitList.isEmpty()){
-            int digit = digitList.pollLast();
-            result += digit*multiplier;
-            multiplier *= 10;
-        }
-        return result;
-    }
-
-
-/*
-
-
-    static Integer solvePart2(Integer output) throws IOException {
-        for (int i = 0; i < 10000; i++) {
-            int result = 0;
-            List<Integer> input = getIntCodeInput();
-            try {
-                result = solvePart1(input, i);
-                System.out.println("iteratie "+i +": " + result);
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("iteratie "+i +": " + e.getMessage());
-            }
-            if (result == output) {
-                return i;
-            }
-        }
-        throw new RuntimeException("No valid noun and verb found");
-    }
-
-*/
-/*
-    static List<Integer> initializeWithComputerCode(List<Integer> intCode, Integer computerCode) {
-
-        int noun = computerCode / 100;
-        int verb = computerCode % 100;
-
-        intCode.set(1, noun);
-        intCode.set(2, verb);
-
-        return intCode;
-    }
-    */
 }

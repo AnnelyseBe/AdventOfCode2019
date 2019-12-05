@@ -8,19 +8,23 @@ public class Day4 {
 
     public static void main(String[] args) {
         Instant start = Instant.now();
-        System.out.println("solution part 1 ***************************************************");
-        System.out.println("\nthe solution is: "+ solve1(240298, 784956) + "***************************************************");
+        System.out.println("\n*******************************************solution part 1***********************************************************************************");
+        System.out.println("-------------------------------Solution----------------------------");
+        System.out.println(solve1(240298, 784956));
 
         Instant finish = Instant.now();
         long timeElapsed = Duration.between(start, finish).toMillis();
-        System.out.println("Processing time: " + timeElapsed + " millis or " + timeElapsed / 1000 + " seconds");
+        System.out.println("---------------------------Processing time-------------------------");
+        System.out.println(+ timeElapsed + " millis or " + timeElapsed / 1000 + " seconds");
         start = Instant.now();
-        System.out.println("solution part 2 ***************************************************");
-        System.out.println("\nthe solution is: "+ solve2(240298, 784956) + "***************************************************");
+        System.out.println("\n*******************************************solution part 2***********************************************************************************");
+        System.out.println("-------------------------------Solution----------------------------");
+        System.out.println(solve2(240298, 784956));
 
         finish = Instant.now();
         timeElapsed = Duration.between(start, finish).toMillis();
-        System.out.println("Processing time: " + timeElapsed + " millis or " + timeElapsed / 1000 + " seconds");
+        System.out.println("---------------------------Processing time-------------------------");
+        System.out.println(+ timeElapsed + " millis or " + timeElapsed / 1000 + " seconds");
     }
 
     private static int solve1(int lowestCode, int highestCode){
@@ -50,8 +54,6 @@ public class Day4 {
 
             if (neverDecrease(digits) && containsPairOfExactly2adjacentIdenticals(digits)){
                 count++;
-                System.out.print("\ncorrect: ");
-                digits.stream().forEach(i -> System.out.print(i));
             }
             code = transformDigitListToCode(digits) + 1;
 
