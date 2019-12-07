@@ -9,31 +9,44 @@ import java.util.stream.Collectors;
 
 public class Day5 {
 
+    //todo instructionpointers uit de argumenten halen
+
     private static List<Integer> intCode;
     private static List<Integer> intCodeMode;
     private static int computerCodeInput;
+    private static int instructionPointer;
+    private static int lastOutput;
 
     public static void main(String[] args) throws IOException {
         System.out.println("\n********************************************Part1********************************************");
         System.out.println("\nSolution part 1: ");
-        solvePart1(getIntCodeInput(), 1);
+        solvePart1(getIntCodeInput("Day5"), 1);
+        System.out.println("\n********************************************Part2********************************************");
+        System.out.println("\nSolution part 2: ");
+        solvePart1(getIntCodeInput("Day5"), 5);
     }
 
-    static List<Integer> getIntCodeInput() throws IOException {
-        String input = Files.readString(Paths.get("src/main/resources/input/year2019", "Day5"));
+    static List<Integer> getIntCodeInput(String fileName) throws IOException {
+        String input = Files.readString(Paths.get("src/main/resources/input/year2019", fileName));
         return Arrays.stream(input.split(","))
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
     }
 
-    static void solvePart1(List<Integer> intCodeinput, int computerCode) {
+    static int solvePart1(List<Integer> intCodeinput, int computerCode) {
+        computerCodeInput = computerCode;
+        solvingAlgorithm(intCodeinput);
+        return lastOutput;
+    }
+
+    static void solvePart2(List<Integer> intCodeinput, int computerCode) {
         computerCodeInput = computerCode;
         solvingAlgorithm(intCodeinput);
     }
 
     static List<Integer> solvingAlgorithm(List<Integer> input) throws IndexOutOfBoundsException {
 
-        int instructionPointer = 0;
+        instructionPointer = 0;
         intCode = input;
         intCodeMode = input.stream().map(value -> 9).collect(Collectors.toList());
 
@@ -42,25 +55,35 @@ public class Day5 {
 
             switch(getOpCode(instructionPointer)){
                 case 1:
-                    optcode1(instructionPointer);
-                    instructionPointer += 4;
+                    optcode1();
                     break;
                 case 2:
-                    optcode2(instructionPointer);
-                    instructionPointer += 4;
+                    optcode2();
                     break;
                 case 3:
-                    optcode3(instructionPointer);
-                    instructionPointer += 2;
+                    optcode3();
                     break;
                 case 4:
-                    optcode4(instructionPointer);
-                    instructionPointer += 2;
+                    optcode4();
+                    break;
+                case 5:
+                    optcode5();
+                    break;
+                case 6:
+                    optcode6();
+                    break;
+                case 7:
+                    optcode7();
+                    break;
+                case 8:
+                    optcode8();
                     break;
             }
         }
         return intCode;
     }
+
+
 
 
     private static int getOpCode(int instructionPointer){
@@ -71,16 +94,18 @@ public class Day5 {
         return opCode;
     }
 
-    static void optcode1(int instructionPointer) {
+    static void optcode1() {
         int parameter1 = getValueOfParameter(instructionPointer, 1);
         int parameter2 = getValueOfParameter(instructionPointer, 2);
 
         int result = parameter1 + parameter2;
 
         writeResult(instructionPointer, 3, result);
+
+        instructionPointer += 4;
     }
 
-    static void optcode2(int instructionPointer) {
+    static void optcode2() {
 
         int parameter1 = getValueOfParameter(instructionPointer, 1);
         int parameter2 = getValueOfParameter(instructionPointer, 2);
@@ -88,17 +113,66 @@ public class Day5 {
         int result = parameter1 * parameter2;
 
         writeResult(instructionPointer, 3, result);
+        instructionPointer += 4;
     }
 
-    static void optcode3(int instructionPointer) {
+    static void optcode3() {
         int result = computerCodeInput;
         writeResult(instructionPointer, 1, result);
+        instructionPointer += 2;
     }
 
-    static void optcode4(int instructionPointer) {
-
+    static void optcode4() {
         int result = getValueOfParameter(instructionPointer, 1);
         System.out.println("----------------------------------output: " + result);
+        lastOutput = result;
+        instructionPointer += 2;
+    }
+
+    private static void optcode5() {
+        int parameter1 = getValueOfParameter(instructionPointer, 1);
+        int parameter2 = getValueOfParameter(instructionPointer, 2);
+
+        if (parameter1 != 0){
+            instructionPointer = parameter2;
+        } else {
+            instructionPointer += 3;
+        }
+    }
+
+    private static void optcode6() {
+        int parameter1 = getValueOfParameter(instructionPointer, 1);
+        int parameter2 = getValueOfParameter(instructionPointer, 2);
+
+        if (parameter1 == 0){
+            instructionPointer = parameter2;
+        } else {
+            instructionPointer += 3;
+        }
+    }
+
+    private static void optcode7() {
+        int parameter1 = getValueOfParameter(instructionPointer, 1);
+        int parameter2 = getValueOfParameter(instructionPointer, 2);
+
+        if (parameter1 < parameter2){
+            writeResult(instructionPointer, 3, 1);
+        } else {
+            writeResult(instructionPointer, 3, 0);
+        }
+        instructionPointer += 4;
+    }
+
+    private static void optcode8() {
+        int parameter1 = getValueOfParameter(instructionPointer, 1);
+        int parameter2 = getValueOfParameter(instructionPointer, 2);
+
+        if (parameter1 == parameter2){
+            writeResult(instructionPointer, 3, 1);
+        } else {
+            writeResult(instructionPointer, 3, 0);
+        }
+        instructionPointer += 4;
     }
 
     static int getValueOfParameter(int instructionPointer, int parameterNr){
@@ -147,4 +221,6 @@ public class Day5 {
         }
         return digits;
     }
+
+
 }
