@@ -39,11 +39,6 @@ public class Day5 {
         return lastOutput;
     }
 
-    static void solvePart2(List<Integer> intCodeinput, int computerCode) {
-        computerCodeInput = computerCode;
-        solvingAlgorithm(intCodeinput);
-    }
-
     static List<Integer> solvingAlgorithm(List<Integer> input) throws IndexOutOfBoundsException {
 
         instructionPointer = 0;
@@ -82,8 +77,6 @@ public class Day5 {
         }
         return intCode;
     }
-
-
 
 
     private static int getOpCode(int instructionPointer){
@@ -209,9 +202,7 @@ public class Day5 {
         }
     }
 
-    /**
-    3 becomes 00003 -> digits.get(4);
-    */
+
     private static List<Integer> transformNumberTo5DigitList(int code){
         List<Integer> digits = new ArrayList<>();
 
