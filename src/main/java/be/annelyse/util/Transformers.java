@@ -19,10 +19,26 @@ public class Transformers {
         return digits;
     }
 
+    //todo duplicate code
+    /**
+     3 becomes 0,0,0,0,3 -> digits.get(4);
+     */
+    public static List<Integer> transformNumberToDigitList(long code, int numberOfDigits){
+        List<Integer> digits = new ArrayList<>();
+
+        for (int k = 0; k < numberOfDigits; k++){
+            digits.add(0,(int) code % 10 );
+            code = code / 10;
+        }
+        return digits;
+    }
+
+
+
     /**
      0,0,0,0,3 becomes 3 -> digits.get(4);
      */
-    public static int transformDigitListToCode (List<Integer> digitList){
+    public static int transformDigitListToInt(List<Integer> digitList){
         int result = 0;
         int multiplier = 1;
 
@@ -33,4 +49,20 @@ public class Transformers {
         }
         return result;
     }
+
+    /**
+     0,0,0,0,3 becomes 3 -> digits.get(4);
+     */
+    public static long transformDigitListToLong (List<Integer> digitList){
+        int result = 0;
+        int multiplier = 1;
+
+        while (!digitList.isEmpty()){
+            int digit = digitList.remove(digitList.size()-1);
+            result += digit*multiplier;
+            multiplier *= 10;
+        }
+        return result;
+    }
+
 }
