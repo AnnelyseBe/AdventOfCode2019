@@ -255,11 +255,11 @@ public class IntCodeComputer2 implements Runnable {
     private void writeResult(int instructionPointer, int parameterNr, long result) {
 
         int positionMode = getPositionModeOfParameter(instructionPointer, parameterNr);
-        int indexOfParameter = assurePosition(instructionPointer + parameterNr);
+        int indexOfParameter = instructionPointer + parameterNr;
 
         int indexToWrite = switch (positionMode) {
             case 0 -> assurePosition(memory.get(indexOfParameter).intValue());
-            case 1 -> indexOfParameter;
+            case 1 -> assurePosition(indexOfParameter);
             case 2 -> assurePosition(memory.get(indexOfParameter).intValue() + relativeBase);
             default -> throw new RuntimeException("PositionMode: " + positionMode + "does not exist");
         };
@@ -297,8 +297,8 @@ public class IntCodeComputer2 implements Runnable {
 
     private int assurePosition(int position){
         int numberOfExtraPositions;
-        if (position > memory.size()){
-            numberOfExtraPositions = position + 5 - memory.size();
+        if (position >= memory.size()){
+            numberOfExtraPositions = position + 1 - memory.size();
             List<Long> memoryExtension = Stream.generate(() -> 0L).limit(numberOfExtraPositions).collect(Collectors.toList());
             memory.addAll(memoryExtension);
         }

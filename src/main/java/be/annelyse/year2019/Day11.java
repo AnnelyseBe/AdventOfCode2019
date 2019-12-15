@@ -1,5 +1,6 @@
 package be.annelyse.year2019;
 
+import be.annelyse.util.Color;
 import be.annelyse.util.Coordinate2D;
 import be.annelyse.util.Direction;
 
@@ -12,12 +13,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-
-//todo ... de threads nog beter op elkaar afstemmen, zodat we het eindresultaat kunnen ophalen
 public class Day11 {
 
     private static LinkedBlockingQueue<Long> inputPaintRobot = new LinkedBlockingQueue<>();
     private static LinkedBlockingQueue<Long> outputPaintRobot = new LinkedBlockingQueue<>();
+    private static List<Pannel> paintedPannels;
 
     public static void main(String[] args) {
 
@@ -67,13 +67,14 @@ public class Day11 {
 
         try {
             intComputerThread.join();
+            paintedPannels = ourPaintRobot.getPaintedPannels();
             ourPaintRobot.setActive(false);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        return ourPaintRobot.getPaintedPannels().size();
-
+        printPaintedPannels(paintedPannels);
+        return paintedPannels.size();
     }
 
     static List<Long> getInput(String inputFileName) {
@@ -86,6 +87,40 @@ public class Day11 {
         return Arrays.stream(input.split(","))
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
+    }
+
+    static String[][] printPaintedPannels(List<Pannel> paintedPannels) {
+
+        int xMin = paintedPannels.stream().map(Coordinate2D::getX).min(Integer::compareTo).get();
+        int xMax = paintedPannels.stream().map(Coordinate2D::getX).max(Integer::compareTo).get();
+        int yMin = paintedPannels.stream().map(Coordinate2D::getY).min(Integer::compareTo).get();
+        int yMax = paintedPannels.stream().map(Coordinate2D::getY).max(Integer::compareTo).get();
+
+        System.out.println("xMin: " + xMin + "  xMax: " + xMax + "  yMin: " + yMin + "  yMax: " + yMax);
+
+        int columnCount = xMax - xMin + 1;
+        int rowCount = yMax - yMin + 1;
+
+        String[][] print = new String[columnCount][rowCount];
+
+        for (int y = rowCount-1; y >= 0; y--){
+            System.out.println();
+
+            for (int x = 0; x < columnCount; x++){
+
+                int indexOfPannel = paintedPannels.indexOf(new Pannel(x+xMin,y+yMin));
+                if(indexOfPannel < 0){
+                    print[x][y] = " ";
+                } else {
+                    Color pannelColor = paintedPannels.get(indexOfPannel).getColor();
+
+                    print[x][y] = pannelColor.toString();
+                }
+                System.out.print(print[x][y]);
+            }
+        }
+        return print;
+
     }
 }
 
