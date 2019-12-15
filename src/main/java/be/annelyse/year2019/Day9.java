@@ -1,26 +1,18 @@
 package be.annelyse.year2019;
 
-import be.annelyse.util.Transformers;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 
 public class Day9 {
 
 
     public static void main(String[] args) {
-        test1();
-        test2();
-        test3();
         partA();
         partB();
     }
@@ -76,15 +68,6 @@ public class Day9 {
         System.out.println("\n output part A: ");
         output.forEach(outputValue -> System.out.print(outputValue + "   "));
     }
-
-
-
-
-
-
-
-
-
 
     static List<Long> getInput(String inputFileName) {
         String input = null;
